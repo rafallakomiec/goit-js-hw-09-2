@@ -32,6 +32,10 @@ function addLeadingZero(value) {
   return string;
 }
 
+function fieldUpdate(selector, value) {
+  document.querySelector(selector).textContent = value;
+}
+
 const calendarOptions = {
   enableTime: true,
   time_24hr: true,
@@ -42,6 +46,7 @@ const calendarOptions = {
     date = selectedDates[0];
 
     if (now.getTime() - date.getTime() >= 0) {
+      startBtn.setAttribute('disabled', 'disabled');
       Notify.failure('Please choose a date in the future');
     } else {
       startBtn.removeAttribute('disabled');
@@ -56,21 +61,18 @@ startBtn.addEventListener('click', () => {
     const now = new Date();
     const remainingTime = convertMs(date.getTime() - now.getTime());
 
-    document.querySelector('[data-days]').textContent = addLeadingZero(
-      remainingTime.days
-    );
-    document.querySelector('[data-hours]').textContent = addLeadingZero(
-      remainingTime.hours
-    );
-    document.querySelector('[data-minutes]').textContent = addLeadingZero(
-      remainingTime.minutes
-    );
-    document.querySelector('[data-seconds]').textContent = addLeadingZero(
-      remainingTime.seconds
-    );
-
     if (date.getTime() - now.getTime() < 0) {
       clearInterval(timer);
+      fieldUpdate('[data-days]', '00');
+      fieldUpdate('[data-hours]', '00');
+      fieldUpdate('[data-minutes]', '00');
+      fieldUpdate('[data-seconds]', '00');
+      return;
     }
+
+    fieldUpdate('[data-days]', addLeadingZero(remainingTime.days));
+    fieldUpdate('[data-hours]', addLeadingZero(remainingTime.hours));
+    fieldUpdate('[data-minutes]', addLeadingZero(remainingTime.minutes));
+    fieldUpdate('[data-seconds]', addLeadingZero(remainingTime.seconds));
   }, 1000);
 });
