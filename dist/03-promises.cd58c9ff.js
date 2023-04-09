@@ -518,26 +518,24 @@ function runCreator(event) {
         return;
     }
     for(let i = 1, { delay: delay1 , step , amount  } = data; i <= amount; i++, delay1 += step)createPromise(i, delay1).then(({ position , delay  })=>{
-        setTimeout(()=>{
-            (0, _notiflixNotifyAio.Notify).success(`Fulfilled promise ${position} in ${delay}ms`);
-        }, delay);
+        (0, _notiflixNotifyAio.Notify).success(`Fulfilled promise ${position} in ${delay}ms`);
     }).catch(({ position , delay  })=>{
-        setTimeout(()=>{
-            (0, _notiflixNotifyAio.Notify).failure(`Rejected promise ${position} in ${delay}ms`);
-        }, delay);
+        (0, _notiflixNotifyAio.Notify).failure(`Rejected promise ${position} in ${delay}ms`);
     });
 }
 function createPromise(position, delay) {
     const shouldResolve = Math.random() > 0.3;
     return new Promise((resolve, reject)=>{
-        if (shouldResolve) resolve({
-            position,
-            delay
-        });
-        else reject({
-            position,
-            delay
-        });
+        setTimeout(()=>{
+            if (shouldResolve) resolve({
+                position,
+                delay
+            });
+            else reject({
+                position,
+                delay
+            });
+        }, delay);
     });
 }
 form.addEventListener("submit", runCreator);
